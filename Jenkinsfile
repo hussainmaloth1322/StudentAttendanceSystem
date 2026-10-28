@@ -1,25 +1,46 @@
+
 pipeline {
-  agent any
-  tools {
-    // Configure NodeJS installation named "Node20" in Jenkins Global Tool Configuration,
-    // or remove this tools block if Node.js is already available on the agent.
-    nodejs 'Node20'
-  }
-  stages {
-    stage('Checkout') {
-      steps { checkout scm }
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Check Node and npm') {
+            steps {
+                bat 'node --version'
+                bat 'npm --version'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                bat 'npm ci'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                bat 'npm test'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                bat 'docker build -t student-attendance-system:latest .'
+            }
+        }
     }
-    stage('Install dependencies') {
-      steps { sh 'npm ci' }
+
+    post {
+        success {
+            echo 'All pipeline stages completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed. Check Console Output.'
+        }
     }
-    stage('Automated API tests') {
-      steps { sh 'npm test' }
-    }
-    stage('Build Docker image') {
-      steps { sh 'docker build -t student-attendance-system:latest .' }
-    }
-  }
-  post {
-    always { echo 'Pipeline finished. Review stage logs for the actual result.' }
-  }
 }
