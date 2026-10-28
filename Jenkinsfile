@@ -32,7 +32,7 @@ pipeline {
             steps {
                 bat '''
                     @echo off
-                    set "PATH=C:\Users\Maloth Hussain\AppData\Local\Programs\DockerDesktop\resources\bin;%PATH%"
+                    set "PATH=C:/Users/Maloth Hussain/AppData/Local/Programs/DockerDesktop/resources/bin;%PATH%"
                     docker --version
                     docker build -t student-attendance-system:latest .
                 '''
