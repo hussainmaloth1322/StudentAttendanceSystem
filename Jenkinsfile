@@ -30,7 +30,12 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t student-attendance-system:latest .'
+                bat '''
+                    @echo off
+                    set "PATH=C:\Users\Maloth Hussain\AppData\Local\Programs\DockerDesktop\resources\bin;%PATH%"
+                    docker --version
+                    docker build -t student-attendance-system:latest .
+                '''
             }
         }
     }
